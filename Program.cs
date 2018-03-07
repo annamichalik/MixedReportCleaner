@@ -17,21 +17,21 @@ namespace MixedReportCleaner
             var xmlPath = Path.Combine(baseDirectory, @"Example\crawlExample.log");
             var xmlResultPath = Path.Combine(baseDirectory, @"Example\cleanedCrawlExample.log");
             var all = File.ReadAllText(xmlPath);
-            var linesToKeep = File.ReadLines(xmlPath).Where(l => (!l.StartsWith("<debug") && !l.StartsWith("uniq") && l.Contains("<")));
+            var linesToKeep = File.ReadLines(xmlPath).Where(l => (!l.Contains("<debug") && !l.StartsWith("uniq") && l.Trim().StartsWith("<")));
             int idx = 0;
             var list = linesToKeep.ToList();
             var lastIndex =list.Count -1;
             var onlyMixedWihOpen = new List<string>(); 
             foreach (var line in list)
             {
-
-                if (line.StartsWith("<open") )
+                var clearLine = line.Trim();
+                if (clearLine.StartsWith("<open") )
                 {
                     if ((lastIndex != idx))
                     {
                         var next = list[idx + 1];
                         if (next.Contains("<MIXED"))
-                            onlyMixedWihOpen.Add(line);
+                            onlyMixedWihOpen.Add(clearLine);
                     }
                   
 
@@ -39,7 +39,7 @@ namespace MixedReportCleaner
                 else
                 {
                     if(!line.StartsWith("</open>"))
-                        onlyMixedWihOpen.Add(line);
+                        onlyMixedWihOpen.Add(clearLine);
                 }
                 idx++;
             }
