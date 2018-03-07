@@ -17,7 +17,7 @@ namespace MixedReportCleaner
             var xmlPath = Path.Combine(baseDirectory, @"Example\crawlExample.log");
             var xmlResultPath = Path.Combine(baseDirectory, @"Example\cleanedCrawlExample.log");
             var all = File.ReadAllText(xmlPath);
-            var linesToKeep = File.ReadLines(xmlPath).Where(l => (!l.StartsWith("<debug") && !l.StartsWith("uniq") && l.StartsWith("<")));
+            var linesToKeep = File.ReadLines(xmlPath).Where(l => (!l.StartsWith("<debug") && !l.StartsWith("uniq") && l.Contains("<")));
             int idx = 0;
             var list = linesToKeep.ToList();
             var lastIndex =list.Count -1;
@@ -30,7 +30,7 @@ namespace MixedReportCleaner
                     if ((lastIndex != idx))
                     {
                         var next = list[idx + 1];
-                        if (next.Contains("<MIXED "))
+                        if (next.Contains("<MIXED"))
                             onlyMixedWihOpen.Add(line);
                     }
                   
